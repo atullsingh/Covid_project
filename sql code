@@ -1,0 +1,101 @@
+SELECT
+  location,
+  date,
+  total_cases,
+  new_cases,
+  total_deaths,
+  population
+FROM
+  civic-champion-352110.project_1.covid_test
+ORDER BY
+  1,2 
+  -- Looking AT total cases Vs Total deaths (Showing percent chance OF dying)
+SELECT
+  location,
+  date,
+  total_cases,
+  total_deaths,
+  (total_deaths/total_cases)*100 AS Death_Percentage
+FROM
+  civic-champion-352110.project_1.covid_test
+ORDER BY
+  1,2
+   -- Looking what percent OF people got covid
+SELECT
+  location,
+  date,
+  total_cases,
+  population,
+  (total_cases/population)*100 AS Case_Percentage
+FROM
+  civic-champion-352110.project_1.covid_test
+ORDER BY
+  1,2 
+  -- Finding coutries
+WITH
+  highest
+  CASE percentage
+SELECT
+  location,
+  MAX(total_cases) AS Max_cases,
+  population,
+  MAX((total_cases/population))*100 AS Case_Percentage
+FROM
+  civic-champion-352110.project_1.covid_test
+WHERE
+  continent IS NOT NULL -- removing continent names
+GROUP BY
+  location,
+  population
+ORDER BY
+  Case_Percentage DESC -- -- Finding coutries
+WITH
+  highest
+  CASE percentage
+SELECT
+  location,
+  MAX(total_cases) AS Max_cases,
+  population,
+  MAX((total_cases/population))*100 AS Case_Percentage
+FROM
+  civic-champion-352110.project_1.covid_test
+WHERE
+  continent IS NULL -- removing continent names
+GROUP BY
+  location,
+  population
+ORDER BY
+  Case_Percentage DESC -- Calculating global numbers --
+SELECT
+  date,
+  SUM(new_cases) AS Total_cases,
+  SUM(new_deaths) AS Total_deaths,
+  (SUM(new_deaths)/SUM(new_cases))*100 AS Death_percentage
+FROM
+  civic-champion-352110.project_1.covid_test
+WHERE
+  continent IS NOT NULL -- removing continent names
+GROUP BY
+  date
+ORDER BY
+  1,
+  2 DESC 
+  -- total global
+SELECT
+  SUM(new_cases) AS Total_cases,
+  SUM(new_deaths) AS Total_deaths,
+  (SUM(new_deaths)/SUM(new_cases))*100 AS Death_percentage
+FROM
+  civic-champion-352110.project_1.covid_test
+WHERE
+  continent IS NOT NULL -- removing continent names
+   -- Joining tables
+SELECT
+  *
+FROM
+  civic-champion-352110.project_1.covid_vaccine AS vaccine
+JOIN
+  civic-champion-352110.project_1.covid_test AS test
+ON
+  vaccine.location = test.location
+  AND vaccine.date = test.date 

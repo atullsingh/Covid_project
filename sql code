@@ -48,10 +48,9 @@ GROUP BY
   location,
   population
 ORDER BY
-  Case_Percentage DESC -- -- Finding coutries
-WITH
-  highest
-  CASE percentage
+  Case_Percentage DESC 
+  -- 
+  -- Finding coutries with highest CASE percentage
 SELECT
   location,
   MAX(total_cases) AS Max_cases,

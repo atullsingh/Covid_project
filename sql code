@@ -31,10 +31,7 @@ FROM
   civic-champion-352110.project_1.covid_test
 ORDER BY
   1,2 
-  -- Finding coutries
-WITH
-  highest
-  CASE percentage
+  -- Finding coutries with highest case percentage
 SELECT
   location,
   MAX(total_cases) AS Max_cases,
@@ -79,6 +76,7 @@ GROUP BY
 ORDER BY
   1,
   2 DESC 
+  --
   -- total global
 SELECT
   SUM(new_cases) AS Total_cases,
@@ -98,3 +96,16 @@ JOIN
 ON
   vaccine.location = test.location
   AND vaccine.date = test.date 
+  
+ -- Joining Tables to get data for vaccination and deaths
+ SELECT vaccine.date, (Max(test.total_deaths)/Max(test.total_cases))*100 as Death_Percent, Max(vaccine.total_vaccinations) As total_vaccination
+FROM
+  civic-champion-352110.project_1.covid_vaccine AS vaccine
+
+JOIN
+  civic-champion-352110.project_1.covid_test AS test
+ON
+  vaccine.location = test.location
+  AND vaccine.date = test.date
+  group by vaccine.date, vaccine.location
+  having vaccine.location = "World" 
